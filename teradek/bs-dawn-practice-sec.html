@@ -2,18 +2,38 @@
     #{{ section.settings.uuid }}
     {
       height: {{ section.settings.section-height }}em;
+      {% if ection.settings.section-bg != blank %}
+      background-image: url({{ section.settings.section-bg | img_url : "master" }});
+      {% endif %}
+      background-size : {{ section.settings.bg-size }};
+      background-position : {{ section.settings.bg-position }};
+      background-repeat : {{ section.settings.bg-repeat }};
     }
   </style>
   <div class="canvas">
       <section id="{{ section.settings.uuid }}" class="{{ section.settings.section-class }}" 
         style=" 
-        background-color: {{ section.settings.section-bg-color }}; 
-        background-image:url({{ section.settings.section-bg | img_url : "master" }})">
+        background-color: {{ section.settings.section-bg-color }};">
           <div class="{{ section.settings.container-type }}  {{ section.settings.container-classes }}">
              {% for block in section.blocks %}
                {% if block.type == 'text-block' %}
-                  <{{ block.settings.tag }}  class="{{ block.settings.font-size }}" style="color: {{ block.settings.text-color }};">{{ block.settings.element-text }}</{{ block.settings.tag }}>
+                  <{{ block.settings.tag }}  class="{{ block.settings.font-size }} {{ block.settings.text-classes }}" style="color: {{ block.settings.text-color }};">{{ block.settings.element-text }}</{{ block.settings.tag }}>
                 {% endif %}
+               {% if block.type == "column-start-block" %}
+                 <div class="{{ block.settings.col-class }}">
+                 {% endif %}
+               {% if block.type == "column-end-block" %}
+                 </div>
+                 {% endif %}
+               {% if block.type == "row-start-block" %}
+                 <div class="row {{ block.settings.row-classes }}">
+                 {% endif %}
+                 {% if block.type == "image-block" %}
+                 <img src="{{ block.settings.inline-image | img_url : "master" }}" alt="img" class="{{ block.settings.image-classes }}" style="width:{{ block.settings.image-width }}em">
+                 {% endif %}
+               {% if block.type == "button-block" %}
+                 <a href="{{ block.sections.btn-link }}"  class="btn {{ block.settings.btn-type }} {{ block.settings.btn-size }} {{ block.settings.btn-classes }}">{{ block.settings.btn-text }}</a>
+                 {% endif %}
               {% endfor %}
           </div>
       </section>
@@ -46,6 +66,61 @@
           "type" : "image_picker",
           "id" : "section-bg",
           "label" : "Section Background image"
+        },
+        {
+          "type" : "text",
+          "id" : "bg-size",
+          "label" : "Background-size"
+        },
+        {
+           "type" : "select",
+           "id" : "bg-position",
+           "label" : "Background-position",
+           "options" : [
+            {
+                "value" : "top left",
+                "label" : "top left"
+            },
+            {
+                "value" : "top center",
+                "label" : "top center"
+            },
+            {
+                "value" : "top right",
+                "label" : "top right"
+            },
+            {
+                "value" : "center",
+                "label" : "center"
+            },
+            {
+                "value" : "bottom left",
+                "label" : "bottom left"
+            },
+            {
+                "value" : "bottom center",
+                "label" : "bottom center"
+            },
+            {
+                "value" : "bottom right",
+                "label" : "bottom right"
+            }
+           ]
+        },
+        {
+            "type" : "select",
+            "id" : "bg-repeat",
+            "label" : "Background Repeat",
+            "options" : [
+             {
+                "value" : "repeat",
+                "label" : "repeat"
+             },
+             {
+                "value" : "no-repeat",
+                "label" : "no repeat"
+             }
+            ]
         },
         {
           "type" : "select",
@@ -108,6 +183,10 @@
                   "label" : "h6"
                 },
                 {
+                  "value" : "p",
+                  "label" : "p"
+                },
+                {
                   "value" : "span",
                   "label" : "span"
                 },
@@ -118,9 +197,14 @@
               ]
             },
             {
-              "type" : "text",
+              "type" : "html",
               "id" : "element-text",
               "label" : "Text"
+            },
+            {
+              "type" : "text",
+              "id" : "text-classes",
+              "label" : "Text Classes"
             },
              {
                 "type" : "select",
@@ -204,7 +288,189 @@
               "label" : "Text Color"
             }
           ]
-        }
+        },
+        {
+          "name" : "Column Start",
+          "type" : "column-start-block",
+          "settings" : [
+            {
+              "type" : "text",
+              "id" : "col-class",
+              "label" : "Col Class"
+            }
+          ]
+        },
+        {
+          "name" : "End Row or Column",
+          "type" : "column-end-block"
+        },
+        {
+            "name" : "Row Start",
+            "type" : "row-start-block",
+            "settings" : [
+              {
+                "type" : "text",
+                "id" : "row-classes",
+                "label" : "Row Classes"
+              }
+            ]
+        },
+        {
+            "name" : "Image Block",
+            "type" : "image-block",
+            "settings" : [
+              {
+                "type" : "image_picker",
+                "id" : "inline-image",
+                "label" : "Image"
+              },
+              {
+                "type" : "text",
+                "id" : "image-classes",
+                "label" : "image-classes"
+              },
+              {
+                "type" : "text",
+                "id" : "image-width",
+                "label" : "Img Width"
+              }
+            ]
+        },
+       {
+         "name" : "Button Block",
+         "type" : "button-block",
+         "settings" : [
+           {
+             "type"  : "url",
+             "id" : "btn-link",
+             "label" : "Button Link"
+           },
+           {
+             "type" : "select",
+             "id" : "btn-type",
+             "label" : "Button type",
+             "options" : [
+               {
+                 "value" : "btn-primary",
+                 "label" : "btn-primary"
+               },
+               {
+                 "value" : "btn-secondary",
+                 "label" : "btn-secondary"
+               },
+               {
+                 "value" : "btn-warning",
+                 "label" : "btn-warning"
+               },
+               {
+                 "value" : "btn-danger",
+                 "label" : "btn-danger"
+               },
+               {
+                 "value" : "btn-dark",
+                 "label" : "btn-dark"
+               },
+               {
+                 "value" : "btn-light",
+                 "label" : "btn-light"
+               },
+               {
+                 "value" : "btn-success",
+                 "label" : "btn-success"
+               },
+               {
+                 "value" : "btn-info",
+                 "label" : "btn-info"
+               },
+               {
+                 "value" : "btn-sm-primary",
+                 "label" : "btn-sm-primary"
+               },
+               {
+                 "value" : "btn-td-primary",
+                 "label" : "btn-td-primary"
+               },
+               {
+                 "value" : "btn-wc-primary",
+                 "label" : "btn-wc-primary"
+               },
+               {
+                 "value" : "btn-outline-primary",
+                 "label" : "btn-outline-primary"
+               },
+               {
+                 "value" : "btn-outline-secondary",
+                 "label" : "btn-outline-secondary"
+               },
+               {
+                 "value" : "btn-outline-warning",
+                 "label" : "btn-outline-warning"
+               },
+               {
+                 "value" : "btn-outline-danger",
+                 "label" : "btn-outline-danger"
+               },
+               {
+                 "value" : "btn-outline-dark",
+                 "label" : "btn-outline-dark"
+               },
+               {
+                 "value" : "btn-outline-light",
+                 "label" : "btn-outline-light"
+               },
+               {
+                 "value" : "btn-outline-success",
+                 "label" : "btn-outline-success"
+               },
+               {
+                 "value" : "btn-outline-info",
+                 "label" : "btn-outline-info"
+               },
+               {
+                 "value" : "btn-outline-sm-primary",
+                 "label" : "btn-outline-sm-primary"
+               },
+               {
+                 "value" : "btn-outline-td-primary",
+                 "label" : "btn-outline-td-primary"
+               },
+               {
+                 "value" : "btn-outline-wc-primary",
+                 "label" : "btn-outline-wc-primary"
+               }
+             ]
+           },
+           {
+             "type": "text",
+             "id" : "btn-text",
+             "label" : "Button Text"
+           },
+           {
+             "type" : "select",
+             "id" : "btn-size",
+             "label" : "Button Size",
+             "options" : [
+               {
+                 "value" : "",
+                 "label" : "btn-default"
+               },
+               {
+                  "value" : "btn-lg",
+                 "label" : "btn-lg"
+               },
+               {
+                 "value" : "btn-sm",
+                 "label" : "btn-sm"
+               }
+             ]
+           },
+           {
+             "type": "text",
+             "id" : "btn-classes",
+             "label" : "btn-classes"
+           }
+         ]
+       }
       ],
       "presets" : [
         {
