@@ -1,0 +1,221 @@
+<style>
+    #{{ section.settings.uuid }}
+    {
+      height: {{ section.settings.section-height }}em;
+    }
+  </style>
+  <div class="canvas">
+      <section id="{{ section.settings.uuid }}" class="{{ section.settings.section-class }}" 
+        style=" 
+        background-color: {{ section.settings.section-bg-color }}; 
+        background-image:url({{ section.settings.section-bg | img_url : "master" }})">
+          <div class="{{ section.settings.container-type }}  {{ section.settings.container-classes }}">
+             {% for block in section.blocks %}
+               {% if block.type == 'text-block' %}
+                  <{{ block.settings.tag }}  class="{{ block.settings.font-size }}" style="color: {{ block.settings.text-color }};">{{ block.settings.element-text }}</{{ block.settings.tag }}>
+                {% endif %}
+              {% endfor %}
+          </div>
+      </section>
+  </div>
+  {% schema %}
+    {
+      "name": "BS Dawn",
+      "settings": [
+        {
+          "type" : "text",
+          "id" : "uuid",
+          "label" : "Section ID"
+        },
+        {
+          "type" : "text",
+          "id" : "section-class",
+          "label" : "Section Class"
+        },
+        {
+          "type" : "text",
+          "id" : "section-height",
+          "label" : "Section Height (em)"
+        },
+        {
+          "type" : "color",
+          "id" : "section-bg-color",
+          "label" : "Section BG Color"
+        },
+        {
+          "type" : "image_picker",
+          "id" : "section-bg",
+          "label" : "Section Background image"
+        },
+        {
+          "type" : "select",
+          "id" : "container-type",
+          "label" : "Container Type",
+          "options" : [
+            {
+              "value" : "container-fluid",
+              "label" : "container-fluid"
+            },
+            {
+              "value" : "container",
+              "label" : "container"
+            },
+            {
+              "value" : "container-pf",
+              "label" : "container-progressive"
+            }
+          ],
+          "default" : "container-pf"
+        },
+        {
+          "type" : "text",
+          "id" : "container-classes",
+          "label" : "Container Classes"
+        }
+      ],
+      "blocks" : [
+        {
+          "name" : "Text Block",
+          "type" : "text-block",
+          "settings" : [
+            {
+              "type" : "select",
+              "id" : "tag",
+              "label" : "Select Text Tag",
+              "options" : [
+                {
+                  "value" : "h1",
+                  "label" : "h1"
+                },
+                {
+                  "value" : "h2",
+                  "label" : "h2"
+                },
+                {
+                  "value" : "h3",
+                  "label" : "h3"
+                },
+                {
+                  "value" : "h4",
+                  "label" : "h4"
+                },
+                {
+                  "value" : "h5",
+                  "label" : "h5"
+                },
+                {
+                  "value" : "h6",
+                  "label" : "h6"
+                },
+                {
+                  "value" : "span",
+                  "label" : "span"
+                },
+                {
+                  "value" : "small",
+                  "label" : "small"
+                }
+              ]
+            },
+            {
+              "type" : "text",
+              "id" : "element-text",
+              "label" : "Text"
+            },
+             {
+                "type" : "select",
+                "id" : "font-size",
+                "label" : "Font Size",
+                "options" : [
+                  {
+                    "value" : "display-1",
+                    "label" : "display-1"
+                  },
+                  {
+                    "value" : "display-2",
+                    "label" : "display-2"
+                  },
+                  {
+                    "value" : "display-3",
+                    "label" : "display-3"
+                  },
+                  {
+                    "value" : "display-4",
+                    "label" : "display-4"
+                  },
+                  {
+                    "value" : "display-5",
+                    "label" : "display-5"
+                  },
+                  {
+                    "value" : "display-6",
+                    "label" : "display-6"
+                  },
+                  {
+                    "value" : "fs-1",
+                    "label" : "fs-1"
+                  },
+                  {
+                    "value" : "fs-2",
+                    "label" : "fs-2"
+                  },
+                  {
+                    "value" : "fs-3",
+                    "label" : "fs-3"
+                  },
+                  {
+                    "value" : "fs-4",
+                    "label" : "fs-4"
+                  },
+                  {
+                    "value" : "fs-5",
+                    "label" : "fs-5"
+                  },
+                  {
+                    "value" : "fs-6",
+                    "label" : "fs-6"
+                  },
+                  {
+                    "value" : "fs-7",
+                    "label" : "fs-7"
+                  },
+                  {
+                    "value" : "fs-8",
+                    "label" : "fs-8"
+                  },
+                  {
+                    "value" : "fs-9",
+                    "label" : "fs-9"
+                  },
+                  {
+                    "value" : "fs-10",
+                    "label" : "fs-10"
+                  },
+                  {
+                    "value" : "",
+                    "label" : "none"
+                  }
+                ],
+               "default" : ""
+              },
+            {
+              "type" : "color",
+              "id" : "text-color",
+              "label" : "Text Color"
+            }
+          ]
+        }
+      ],
+      "presets" : [
+        {
+          "name" : "Bs-Dawn"
+        }
+      ]
+    }
+  {% endschema %}
+  
+  {% stylesheet %}
+  {% endstylesheet %}
+  
+  {% javascript %}
+  {% endjavascript %}
